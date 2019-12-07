@@ -1,0 +1,6 @@
+﻿Potrebno je instalirati SQL server express i SQL server management studio
+
+Prije pokretanja projekta obaviti sljedece
+	1) Tools -> Nouget package manager -> Package manager console (Dolje kod Error List i Output bi se trebao stvoriti novi tab Package Manager Console)
+	2) u konzolu ukucati Update-Database (Pazite da je otvoren tab Package Manager Console, a ne tipa ErrorList ili Output)
+	3) Pricekajte da sve izvrsi (treba pisati Done.)

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using INTS_API.Interfaces;
-using INTS_API.Models.ServiceResult;
+using INTS_API.Models.ServiceResponse;
 
 namespace INTS_API.Services
 {
@@ -20,7 +20,7 @@ namespace INTS_API.Services
             throw new System.NotImplementedException();
         }
 
-        public virtual async Task<AuthRegistrationResult> Register(string userName, string plainPassword)
+        public virtual async Task<ServiceResult> Register(string userName, string plainPassword)
         {
             throw new System.NotImplementedException();
         }

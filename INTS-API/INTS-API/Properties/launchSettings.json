@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "authentication",
+      "launchUrl": "api/authentication",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

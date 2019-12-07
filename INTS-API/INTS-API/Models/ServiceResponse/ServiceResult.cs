@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace INTS_API.Models.ServiceResult
+namespace INTS_API.Models.ServiceResponse
 {
     public abstract class ServiceResult
     {
