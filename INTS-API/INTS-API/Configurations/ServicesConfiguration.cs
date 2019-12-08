@@ -1,4 +1,5 @@
 ﻿using INTS_API.Interfaces;
+using INTS_API.Persistence.Repository;
 using INTS_API.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,8 @@ namespace INTS_API.Configurations
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IHasher, PasswordHasher>();
             services.AddScoped<ITokenManager, TokenManager>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(AsyncRepository<>));
         }
     }
 }

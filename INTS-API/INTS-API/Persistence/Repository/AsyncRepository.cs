@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace INTS_API.Persistence.Repository
 {
-    public abstract class AsyncRepository<T> : IRepository<T> where T : class
+    public class AsyncRepository<T> : IRepository<T> where T : class
     {
         protected readonly LibraryDBContext _context;
 

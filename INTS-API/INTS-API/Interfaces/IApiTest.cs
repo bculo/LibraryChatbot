@@ -4,7 +4,7 @@ namespace INTS_API.Interfaces
 {
     public interface IApiTest
     {
-        //Testna metoda za testiranje kontrolera
         IActionResult Test();
+        string GetControllerName();
     }
 }
