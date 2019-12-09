@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from ChatbotServer import ChatbotServer
+import ReceiveDataManager
 import json
-import configparser
 import requests
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ chatbot_server = ChatbotServer()
 @app.route('/', methods=['POST'])
 def main_route():
     received_data = json.loads(request.get_data().decode('utf-8'))
-    book_category = chatbot_server.fetch_book_category(received_data)
+    book_category = ReceiveDataManager.fetch_book_category(received_data)
 
     response_text = 'Books in %s: Teorija i primjena baza podataka' % book_category
     return chatbot_server.generate_response(response_text, received_data)
