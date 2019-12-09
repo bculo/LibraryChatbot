@@ -1,7 +1,12 @@
-class ServerResponse(object):
-    """
+"""
     Custom Server Response
-    """
+    Class can be transformed to SAP Conversational AI compatible JSON object
+    Transforming example:
+    JSON_Response = ServerResponse_object.dumps(ServerResponse_object.__dict__)
+"""
+
+
+class ServerResponse(object):
 
     def __init__(self, status, text_type, content, language, name):
         self.status = status
@@ -22,4 +27,3 @@ class ServerResponse(object):
             'language': language,
             'name': name
         }
-

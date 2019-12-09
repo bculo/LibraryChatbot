@@ -1,5 +1,5 @@
 """
-Received data manager - manipulating received JSON file from Chatbot
+    Python script for manipulating received JSON file from Chatbot (SAP Conversational AI)
 """
 
 
@@ -29,3 +29,4 @@ def fetch_location(data):
         return "Language not detected!"
     else:
         return data['conversation']['memory']['location']['formatted']  # formatted | raw
+
