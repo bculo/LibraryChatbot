@@ -14,6 +14,7 @@ namespace INTS_API.Configurations
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBookService, BookService>();
             services.AddScoped<IHasher, PasswordHasher>();
             services.AddScoped<ITokenManager, TokenManager>();
             services.AddScoped<IUserRepository, UserRepository>();

@@ -1,6 +1,6 @@
-﻿namespace INTS_DATASET.Model
+﻿namespace INTS_API.Models.BookAPI
 {
-    public sealed class BookCSV
+    public class BookModel
     {
         public int Id { get; set; }
         public string Title { get; set; }

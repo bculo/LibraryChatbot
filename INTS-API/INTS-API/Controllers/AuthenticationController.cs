@@ -17,13 +17,13 @@ namespace INTS_API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(AuthenticationRequest request)
+        public async Task<IActionResult> Login(AuthenticationRequestModel request)
         {
             var result = await _service.Login(request.UserName, request.Password);
 
             if (result.Success) //uspjesna prijava
             {
-                var responseSuccess = new AuthenticationLoginReponse()
+                var responseSuccess = new AuthenticationLoginReponseModel()
                 {
                     Token = result.Token
                 };
@@ -31,7 +31,7 @@ namespace INTS_API.Controllers
                 return Ok(responseSuccess);
             }
 
-            var responseError = new AuthenticationLoginReponse()
+            var responseError = new AuthenticationLoginReponseModel()
             {
                 Errors = result.Errors,
                 Success = false
@@ -41,16 +41,16 @@ namespace INTS_API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(AuthenticationRequest request)
+        public async Task<IActionResult> Register(AuthenticationRequestModel request)
         {
             var result = await _service.Register(request.UserName, request.Password);
 
             if (result.Success)
             {
-                return Ok(new AuthenticationRegistrationResponse());
+                return Ok(new AuthenticationRegistrationResponseModel());
             }
 
-            var responseError = new AuthenticationRegistrationResponse()
+            var responseError = new AuthenticationRegistrationResponseModel()
             {
                 Errors = result.Errors,
                 Success = false

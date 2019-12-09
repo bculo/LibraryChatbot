@@ -4,14 +4,16 @@ using INTS_API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace INTS_API.Migrations
 {
     [DbContext(typeof(LibraryDBContext))]
-    partial class LibraryDBContextModelSnapshot : ModelSnapshot
+    [Migration("20191209174902_migration v2")]
+    partial class migrationv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,12 +3,13 @@ using INTS_DATASET.Readers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace INTS_DATASET
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             //pripremi CSV path
             string projectPath = GetProjectDirectoryPath();
@@ -18,7 +19,12 @@ namespace INTS_DATASET
             List<BookCSV> books = new BookCSVReader().GetIntances(csvPath);
 
             //posalji podatke na API endpoint
-            LibraryClientFactory.GetBookClient().AddBooks(books);
+            Task.Run(async () =>
+            {
+                await LibraryClientFactory.GetBookClient().AddBooks(books);
+            });
+
+            Console.ReadLine();
         }
 
         public static string GetProjectDirectoryPath()

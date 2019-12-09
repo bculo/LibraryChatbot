@@ -1,7 +1,6 @@
 ﻿using INTS_DATASET.Interfaces;
 using INTS_DATASET.Model;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -11,17 +10,15 @@ namespace INTS_DATASET.Clients
 {
     public class BookClient : IBookClient
     {
-        private readonly string _url = "https://jsonplaceholder.typicode.com/todos/";
+        private readonly string _url = "https://localhost:44368/api/book/filldata";
         private readonly HttpClient _client = new HttpClient();
 
-        public async Task AddBooks(List<BookCSV> task)
+        public async Task AddBooks(List<BookCSV> books)
         {
-            var content = JsonConvert.SerializeObject(task);
-            var httpResponse = await _client.PostAsync(_url, new StringContent(content, Encoding.UTF8, "application/json"));
-
-            if (!httpResponse.IsSuccessStatusCode)
+            foreach (var book in books)
             {
-                throw new Exception("Cannot add books");
+                var content = JsonConvert.SerializeObject(book);
+                var httpResponse = await _client.PostAsync(_url, new StringContent(content, Encoding.Default, "application/json"));
             }
         }
     }

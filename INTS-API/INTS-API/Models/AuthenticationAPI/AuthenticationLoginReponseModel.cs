@@ -2,7 +2,7 @@
 
 namespace INTS_API.Models.AuthenticationAPI
 {
-    public class AuthenticationLoginReponse
+    public class AuthenticationLoginReponseModel
     {
         public bool Success { get; set; } = true;
         public string Token { get; set; }

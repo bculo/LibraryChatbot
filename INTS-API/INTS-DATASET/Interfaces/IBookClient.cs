@@ -6,6 +6,6 @@ namespace INTS_DATASET.Interfaces
 {
     public interface IBookClient
     {
-        Task AddBooks(List<BookCSV> task);
+        Task AddBooks(List<BookCSV> books);
     }
 }
