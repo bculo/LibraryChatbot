@@ -2,6 +2,7 @@
 using INTS_API.Interfaces;
 using INTS_API.Models.BookAPI;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace INTS_API.Controllers
@@ -34,6 +35,16 @@ namespace INTS_API.Controllers
 
             await _service.AddBokk(newBook);
             return Ok();
+        }
+
+        [HttpGet("randombooks")]
+        public async Task<IActionResult> GetRandomBooks()
+        {
+            List<Book> books = await _service.GetRandomBooks();
+
+            //MAPPING
+
+            return Ok(books);
         }
 
         public override string GetControllerName()

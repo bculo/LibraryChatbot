@@ -10,6 +10,7 @@ namespace INTS_API.Configurations
         public void Configure(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SecurityOptions>(configuration.GetSection(nameof(SecurityOptions)));
+            services.Configure<CategoryOptions>(configuration.GetSection(nameof(CategoryOptions)));
         }
     }
 }

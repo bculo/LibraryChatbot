@@ -18,6 +18,7 @@ namespace INTS_API.Configurations
             services.AddScoped<IHasher, PasswordHasher>();
             services.AddScoped<ITokenManager, TokenManager>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(AsyncRepository<>));
         }
     }

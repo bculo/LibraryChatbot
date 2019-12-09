@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 
 namespace INTS_API.Interfaces
 {
-    public interface IBookService
+    public interface IBookRepository : IRepository<Book>
     {
-        Task AddBokk(Book book);
-        Task<List<Book>> GetRandomBooks();
+        Task<List<Book>> GetRandomBooksAsync(int number);
     }
 }
