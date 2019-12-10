@@ -31,7 +31,7 @@ namespace INTS_API.Services
 
         public async Task<List<Book>> GetRandomBooks()
         {
-            return await _bookrepo.GetRandomBooksAsync(10);
+            return await _bookrepo.GetRandomBooksAsync(5);
         }
     }
 }

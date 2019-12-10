@@ -1,4 +1,5 @@
-﻿using INTS_API.Entities;
+﻿using AutoMapper;
+using INTS_API.Entities;
 using INTS_API.Interfaces;
 using INTS_API.Models.BookAPI;
 using Microsoft.AspNetCore.Mvc;
@@ -12,27 +13,18 @@ namespace INTS_API.Controllers
     public class BookController : LibraryMainController
     {
         private readonly IBookService _service;
+        private readonly IMapper _mapper;
 
-        public BookController(IBookService service)
+        public BookController(IBookService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpPost("filldata")]
         public async Task<IActionResult> AddBook(BookModel book)
         {
-            var newBook = new Book()
-            {
-                Authors = book.Authors,
-                AvarageRating = book.AvarageRating,
-                ISBN = book.ISBN,
-                ISBN13 = book.ISBN13,
-                LanguageCode = book.LanguageCode,
-                PageNumber = book.PageNumber,
-                Title = book.Title,
-                RatingsCount = book.RatingsCount,
-            };
-
+            var newBook = _mapper.Map<Book>(book);
             await _service.AddBokk(newBook);
             return Ok();
         }
@@ -41,10 +33,8 @@ namespace INTS_API.Controllers
         public async Task<IActionResult> GetRandomBooks()
         {
             List<Book> books = await _service.GetRandomBooks();
-
-            //MAPPING
-
-            return Ok(books);
+            var bookModles = _mapper.Map<List<BookResponseModel>>(books);
+            return Ok(bookModles);
         }
 
         public override string GetControllerName()
