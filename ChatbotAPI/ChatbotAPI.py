@@ -66,9 +66,23 @@ def book_reservation():
     received_data = json.loads(request.get_data().decode('utf-8'))
     user_name = ReceiveDataManager.fetch_user_name(received_data)
     book = ReceiveDataManager.fetch_book(received_data)  # Finish
+    print(received_data)
 
     # response_text = update_user_book_reservation_response()
     response_text = 'User %s successfully or unsuccessfully made a reservation of %s' % (user_name, book)
+    full_response = chatbot_data.generate_response(response_text, received_data)
+    return full_response
+
+
+@app.route('/feedback', methods=['POST'])
+def user_feedback():
+    # User Feedback Endpoint
+    received_data = json.loads(request.get_data().decode('utf-8'))
+    user_name = ReceiveDataManager.fetch_user_name(received_data)
+    print(received_data)
+
+    # response_text = update_user_book_reservation_response()
+    response_text = 'User %s successfully or unsuccessfully delivered feedback' % user_name
     full_response = chatbot_data.generate_response(response_text, received_data)
     return full_response
 

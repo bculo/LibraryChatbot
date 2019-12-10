@@ -37,3 +37,10 @@ def fetch_book(data):
     else:
         return data['nlp']['entities']['books'][0]['value']
 
+
+def fetch_user_token(data):
+    if 'token' not in data['conversation']['memory']:
+        return None
+    else:
+        return data['conversation']['memory']['token']
+
