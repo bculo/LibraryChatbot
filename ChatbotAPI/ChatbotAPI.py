@@ -12,12 +12,13 @@ chatbot_data = ChatbotData()
 @app.route('/', methods=['POST'])
 def main_route():
     # Main API call
-    # Return something
+    # Return random 10 books from library
     received_data = json.loads(request.get_data().decode('utf-8'))
 
     # response_text = get_random_books_response()
     response_text = 'Random books from library: Teorija i primjena baza podataka'
-    return chatbot_data.generate_response(response_text, received_data)
+    full_response = chatbot_data.generate_response(response_text, received_data)
+    return full_response
 
 
 @app.route('/search', methods=['POST'])
@@ -29,7 +30,8 @@ def search_library():
 
     # response_text = get_categorized_books_response()
     response_text = 'Books in %s: Teorija i primjena baza podataka' % book_category
-    return chatbot_data.generate_response(response_text, received_data)
+    full_response = chatbot_data.generate_response(response_text, received_data)
+    return full_response
 
 
 @app.route('/recommend', methods=['POST'])
@@ -41,12 +43,13 @@ def recommend_book():
 
     # response_text = get_personalized_books_response()
     response_text = 'Books based on preferences of %s: Teorija i primjena baza podataka' % user_name
-    return chatbot_data.generate_response(response_text, received_data)
+    full_response = chatbot_data.generate_response(response_text, received_data)
+    return full_response
 
 
 @app.route('/login', methods=['POST'])
 def user_login():
-    # Update
+    # Implement login
     return jsonify(
         status=200,
         replies=[{
@@ -62,20 +65,24 @@ def book_reservation():
     # Return reservation response
     received_data = json.loads(request.get_data().decode('utf-8'))
     user_name = ReceiveDataManager.fetch_user_name(received_data)
+    book = ReceiveDataManager.fetch_book(received_data)  # Finish
 
     # response_text = update_user_book_reservation_response()
-    response_text = 'User %s successfully or unsuccessfully made a reservation of Teorija i primjena baza podataka' % user_name
-    return chatbot_data.generate_response(response_text, received_data)
+    response_text = 'User %s successfully or unsuccessfully made a reservation of %s' % (user_name, book)
+    full_response = chatbot_data.generate_response(response_text, received_data)
+    return full_response
 
 
 def get_random_books_response():
     random_books = DatabaseManager.get_random_books()
+    print(random_books)
     response_text = random_books.json()  # Update response
     return response_text
 
 
 def get_categorized_books_response():
     categorized_books = DatabaseManager.get_categorized_books()
+    print(categorized_books)
     response_text = categorized_books.json()  # Update response
     return response_text
 

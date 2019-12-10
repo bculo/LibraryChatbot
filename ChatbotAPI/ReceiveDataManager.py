@@ -7,7 +7,7 @@ def fetch_book_category(data):
     if 'book-categories' not in data['nlp']['entities']:
         return 'Book category not detected'
     else:
-        return data['nlp']['entities']['book-categories'][0]['value']  # value | raw
+        return data['nlp']['entities']['book-categories'][0]['value']  # value -> full value | raw -> user typed value
 
 
 def fetch_user_name(data):
@@ -29,4 +29,11 @@ def fetch_location(data):
         return "Language not detected!"
     else:
         return data['conversation']['memory']['location']['formatted']  # formatted | raw
+
+
+def fetch_book(data):
+    if 'books' not in data['nlp']['entities']:
+        return 'Book not detected!'
+    else:
+        return data['nlp']['entities']['books'][0]['value']
 
