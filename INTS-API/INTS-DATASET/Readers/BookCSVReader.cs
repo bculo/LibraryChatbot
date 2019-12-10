@@ -24,7 +24,32 @@ namespace INTS_DATASET.Readers
                 return new List<BookCSV>();
             }
 
-            return ReadFile(filePath).ToList();
+            //procitaj csv
+            var result = ReadFile(filePath);
+
+            //makni duplikate
+            result = result.GroupBy(i => i.Title).Select(i => i.First());
+
+            //prebroji element niza
+            int count = result.Count();
+
+            //uzmi samo 9000 zapisa
+            if (count > 9000)
+                result = result.Take(9000);
+
+
+            var resultList = result.ToList();
+
+            //modifikacija
+            foreach (var book in resultList)
+            {
+                book.LanguageCode = "en";
+
+                if (book.Title.Contains(";"))
+                    book.Title = book.Title.Replace(';', ' ');
+            }
+
+            return resultList;
         }
 
         private IEnumerable<BookCSV> ReadFile(string filePath)
@@ -63,13 +88,12 @@ namespace INTS_DATASET.Readers
             {
                 return new BookCSV()
                 {
-                    Id = int.Parse(rowData[0]),
                     Title = rowData[1],
                     Authors = rowData[2],
                     AvarageRating = double.Parse(rowData[3]),
                     ISBN = rowData[4],
                     ISBN13 = rowData[5],
-                    LanguageCode = rowData[6],
+                    ////LanguageCode = rowData[6],
                     PageNumber = int.Parse(rowData[7]),
                     RatingsCount = int.Parse(rowData[8]),
                     TextReviewsCount = int.Parse(rowData[9])

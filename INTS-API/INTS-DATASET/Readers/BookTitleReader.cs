@@ -8,7 +8,7 @@ using System.Text;
 
 namespace INTS_DATASET.Readers
 {
-    class BookTitleReader
+    public class BookTitleReader
     {
         public bool ValidFile(string filePath)
         {
@@ -25,7 +25,32 @@ namespace INTS_DATASET.Readers
                 return new List<BookTitle>();
             }
 
-            return ReadFile(filePath).ToList();
+            //procitaj csv
+            var result = ReadFile(filePath);
+
+            //makni duplikate
+            result = result.GroupBy(i => i.Title).Select(i => i.First());
+
+            //prebroji element niza
+            int count = result.Count();
+
+            //uzmi samo 9000 zapisa
+            if (count > 9000)
+                result = result.Take(9000);
+
+
+            var resultList = result.ToList();
+
+            //modifikacija
+            foreach (var book in resultList)
+            {
+                book.LanguageCode = "en";
+
+                if (book.Title.Contains(";"))
+                    book.Title = book.Title.Replace(';', ' ');
+            }
+
+            return resultList;
         }
 
         private IEnumerable<BookTitle> ReadFile(string filePath)
@@ -64,8 +89,8 @@ namespace INTS_DATASET.Readers
             {
                 return new BookTitle()
                 {
-                    LanguageCode = rowData[6],
                     Title = rowData[1],
+                    //LanguageCode = rowData[6],
                 };
             }
             catch
