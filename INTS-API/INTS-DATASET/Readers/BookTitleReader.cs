@@ -64,6 +64,7 @@ namespace INTS_DATASET.Readers
             {
                 return new BookTitle()
                 {
+                    LanguageCode = rowData[6],
                     Title = rowData[1],
                 };
             }
