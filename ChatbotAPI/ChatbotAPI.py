@@ -28,7 +28,7 @@ def search_library():
     received_data = json.loads(request.get_data().decode('utf-8'))
     book_category = ReceiveDataManager.fetch_book_category(received_data)
 
-    # response_text = get_categorized_books_response()
+    # response_text = get_categorized_books_response(book_category)
     response_text = 'Books in %s: Teorija i primjena baza podataka' % book_category
     full_response = chatbot_data.generate_response(response_text, received_data)
     return full_response
@@ -66,7 +66,7 @@ def book_reservation():
     received_data = json.loads(request.get_data().decode('utf-8'))
     user_name = ReceiveDataManager.fetch_user_name(received_data)
     book = ReceiveDataManager.fetch_book(received_data)  # Finish
-    print(received_data)
+    print(book)
 
     # response_text = update_user_book_reservation_response()
     response_text = 'User %s successfully or unsuccessfully made a reservation of %s' % (user_name, book)
@@ -89,21 +89,31 @@ def user_feedback():
 
 def get_random_books_response():
     random_books = DatabaseManager.get_random_books()
-    print(random_books)
-    response_text = random_books.json()  # Update response
+    response_text = 'Random 5 books from library:\n'
+    book_number = 1
+    for book in random_books:
+        response_text += str(book_number) + '. ' + book['title'] + '\n'
+        book_number += 1
     return response_text
 
 
-def get_categorized_books_response():
+def get_categorized_books_response(book_category):
     categorized_books = DatabaseManager.get_categorized_books()
-    print(categorized_books)
-    response_text = categorized_books.json()  # Update response
+    response_text = 'Random 5 books from %s category:\n' % book_category
+    book_number = 1
+    for book in categorized_books:
+        response_text += str(book_number) + '. ' + book['title'] + '\n'
+        book_number += 1
     return response_text
 
 
 def get_personalized_books_response():
-    random_books = DatabaseManager.get_personalized_books()
-    response_text = random_books.json()  # Update response
+    personalized_books = DatabaseManager.get_personalized_books()
+    response_text = 'Recommended 5 books based on your preferences:\n'
+    book_number = 1
+    for book in personalized_books:
+        response_text += str(book_number) + '. ' + book['title'] + '\n'
+        book_number += 1
     return response_text
 
 
