@@ -24,6 +24,20 @@ namespace INTS_API.Controllers
         [HttpPost("filldata")]
         public async Task<IActionResult> AddBook(BookModel book)
         {
+            /*
+            var newBook = new Book()
+            {
+                Title = book.Title,
+                PageNumber = book.PageNumber,
+                LanguageCode = book.LanguageCode,
+                Authors = book.Authors,
+                AvarageRating = book.AvarageRating,
+                ISBN = book.ISBN,
+                ISBN13 = book.ISBN13,
+                RatingsCount = book.RatingsCount,
+            };
+            */
+
             var newBook = _mapper.Map<Book>(book);
             await _service.AddBokk(newBook);
             return Ok();

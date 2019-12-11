@@ -1,7 +1,5 @@
 ﻿using INTS_API.Entities;
 using INTS_API.Interfaces;
-using INTS_API.Options;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,12 +9,12 @@ namespace INTS_API.Services
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookrepo;
-        private readonly CategoryOptions _options;
+        private readonly IRepository<Category> _categoryrepo;
 
-        public BookService(IBookRepository bookrepo, IOptions<CategoryOptions> options)
+        public BookService(IBookRepository bookrepo, IRepository<Category> categoryrepo)
         {
             _bookrepo = bookrepo;
-            _options = options.Value;
+            _categoryrepo = categoryrepo;
         }
 
         /// <summary>
@@ -24,8 +22,11 @@ namespace INTS_API.Services
         /// </summary>
         public async Task AddBokk(Book book)
         {
+            int count = await _categoryrepo.CountAsync();
+
             Random rand = new Random();
-            book.CategoryID = rand.Next(0, _options.NumOfCategories);
+            book.CategoryID = rand.Next(0, count);
+
             await _bookrepo.AddAsync(book);
         }
 
