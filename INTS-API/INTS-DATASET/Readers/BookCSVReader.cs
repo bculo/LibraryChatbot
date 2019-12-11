@@ -37,16 +37,19 @@ namespace INTS_DATASET.Readers
             if (count > 9000)
                 result = result.Take(9000);
 
-
+            //pretvori u listu
             var resultList = result.ToList();
 
-            //modifikacija
+            //makni knjigu the earth
+            resultList.RemoveAll(i => i.Title == "The Earth");
+
+            //modifikacija jezicnog koda i makivanje ; iz naslova
             foreach (var book in resultList)
             {
                 book.LanguageCode = "en";
 
                 if (book.Title.Contains(";"))
-                    book.Title = book.Title.Replace(';', ' ');
+                    book.Title = book.Title.Replace(";", "");
             }
 
             return resultList;

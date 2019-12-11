@@ -20,14 +20,19 @@ namespace INTS_API.Services
         /// <summary>
         /// Dodaj novu knjigu sa random kategorijom
         /// </summary>
-        public async Task AddBokk(Book book)
+        public async Task<bool> AddBokk(Book book)
         {
             int count = await _categoryrepo.CountAsync();
 
             Random rand = new Random();
             book.CategoryID = rand.Next(0, count);
 
-            await _bookrepo.AddAsync(book);
+            Book result = await _bookrepo.AddAsync(book);
+
+            if (result != null)
+                return true;
+
+            return false;
         }
 
         public async Task<List<Book>> GetRandomBooks()

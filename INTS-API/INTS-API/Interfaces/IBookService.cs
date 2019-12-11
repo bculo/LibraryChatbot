@@ -6,7 +6,7 @@ namespace INTS_API.Interfaces
 {
     public interface IBookService
     {
-        Task AddBokk(Book book);
+        Task<bool> AddBokk(Book book);
         Task<List<Book>> GetRandomBooks();
     }
 }
