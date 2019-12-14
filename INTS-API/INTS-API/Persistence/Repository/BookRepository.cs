@@ -12,9 +12,37 @@ namespace INTS_API.Persistence.Repository
     {
         public BookRepository(LibraryDBContext context) : base(context) { }
 
-        public Task<List<Book>> GetRandomBooksAsync(int number)
+        public async Task<List<Book>> GetRandomBooksAsync(int number)
         {
-            return _context.Books.OrderBy(i => Guid.NewGuid()).Take(number).ToListAsync();
+            return await _context.Books
+                .OrderBy(i => Guid.NewGuid())
+                .Take(number)
+                .ToListAsync();
+        }
+
+        public async Task<List<Book>> GetRandomBooksByCategoryAsync(string category, int number)
+        {
+            return await _context.Books
+                .Include(i => i.Category)
+                .Where(i => i.Category.Name == category)
+                .OrderBy(i => Guid.NewGuid())
+                .Take(number)
+                .ToListAsync();
+        }
+
+        public async Task CreateBookReservation(string username, string bookName)
+        {
+            
+        }
+
+        public Task<List<Book>> GetUserReservations(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Book> GetBookByName(string name)
+        {
+            return await _context.Books.FirstOrDefaultAsync(i => i.Title.ToLower() == name.ToLower());
         }
     }
 }
