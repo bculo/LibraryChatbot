@@ -3,33 +3,32 @@ from ChatbotData import ChatbotData
 import ReceiveDataManager
 import DatabaseManager
 import json
-import requests
 
 app = Flask(__name__)
 chatbot_data = ChatbotData()
 
 
-@app.route('/', methods=['POST'])
+@app.route('/random', methods=['POST'])
 def main_route():
     # Main API call
-    # Return random 10 books from library
+    # Return random 5 books from library
     received_data = json.loads(request.get_data().decode('utf-8'))
+    print(received_data)
 
-    # response_text = get_random_books_response()
-    response_text = 'Random books from library: Teorija i primjena baza podataka'
+    response_text = get_random_books_response(received_data)
+    # response_text = 'Random books from library: Teorija i primjena baza podataka'
     full_response = chatbot_data.generate_response(response_text, received_data)
     return full_response
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/randomFromCategory', methods=['POST'])
 def search_library():
     # Search Endpoint
-    # Return random | top 10 books from defined category
+    # Return (random | top) 5 books from defined category
     received_data = json.loads(request.get_data().decode('utf-8'))
-    book_category = ReceiveDataManager.fetch_book_category(received_data)
 
-    # response_text = get_categorized_books_response(book_category)
-    response_text = 'Books in %s: Teorija i primjena baza podataka' % book_category
+    response_text = get_categorized_books_response(received_data)
+    # response_text = 'Books in %s: Teorija i primjena baza podataka' % book_category
     full_response = chatbot_data.generate_response(response_text, received_data)
     return full_response
 
@@ -37,7 +36,7 @@ def search_library():
 @app.route('/recommend', methods=['POST'])
 def recommend_book():
     # Recommend Book Endpoint
-    # Return 10 books based on user preferences
+    # Return 5 books based on user preferences
     received_data = json.loads(request.get_data().decode('utf-8'))
     user_name = ReceiveDataManager.fetch_user_name(received_data)
 
@@ -87,9 +86,12 @@ def user_feedback():
     return full_response
 
 
-def get_random_books_response():
-    random_books = DatabaseManager.get_random_books()
-    response_text = 'Random 5 books from library:\n'
+def get_random_books_response(received_data):
+    books_number = ReceiveDataManager.fetch_books_number(received_data)
+    if books_number is None:
+        books_number = 5
+    random_books = DatabaseManager.get_n_random_books(books_number)
+    response_text = 'Random %s books from library:\n' % books_number
     book_number = 1
     for book in random_books:
         response_text += str(book_number) + '. ' + book['title'] + '\n'
@@ -97,9 +99,13 @@ def get_random_books_response():
     return response_text
 
 
-def get_categorized_books_response(book_category):
-    categorized_books = DatabaseManager.get_categorized_books()
-    response_text = 'Random 5 books from %s category:\n' % book_category
+def get_categorized_books_response(received_data):
+    book_category = ReceiveDataManager.fetch_book_category(received_data)
+    books_number = ReceiveDataManager.fetch_books_number(received_data)
+    if books_number is None:
+        books_number = 5
+    categorized_books = DatabaseManager.get_categorized_books(books_number, book_category)
+    response_text = 'Random %s books from %s category:\n' % (books_number, book_category)
     book_number = 1
     for book in categorized_books:
         response_text += str(book_number) + '. ' + book['title'] + '\n'

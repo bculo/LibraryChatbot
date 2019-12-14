@@ -2,7 +2,7 @@
     Custom Server Response
     Class can be transformed to SAP Conversational AI compatible JSON object
     Transforming example:
-    JSON_Response = ServerResponse_object.dumps(ServerResponse_object.__dict__)
+    JSON_Response = json.dumps(ServerResponse_object.__dict__)
 """
 
 

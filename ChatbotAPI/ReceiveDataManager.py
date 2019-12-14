@@ -44,3 +44,10 @@ def fetch_user_token(data):
     else:
         return data['conversation']['memory']['token']
 
+
+def fetch_books_number(data):
+    if 'numbers' not in data['nlp']['entities']:
+        return None
+    else:
+        return data['nlp']['entities']['numbers'][0]['value']  # value -> full value | raw -> user typed value
+
