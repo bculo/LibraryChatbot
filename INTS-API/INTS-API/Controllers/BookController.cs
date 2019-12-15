@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using INTS_API.Entities;
+using INTS_API.Filters;
 using INTS_API.Interfaces;
 using INTS_API.Models.BookAPI;
 using Microsoft.AspNetCore.Mvc;
@@ -40,12 +41,42 @@ namespace INTS_API.Controllers
             }
         }
 
-        [HttpGet("randombooks")]
-        public async Task<IActionResult> GetRandomBooks()
+        [HttpPost("randombooks")]
+        public async Task<IActionResult> GetRandomBooksPost([FromBody] BookRequest model)
         {
-            List<Book> books = await _service.GetRandomBooks();
+            List<Book> books = await _service.GetRandomBooks(model?.Number);
             var bookModles = _mapper.Map<List<BookResponseModel>>(books);
             return Ok(bookModles);
+        }
+
+        [HttpGet("randombooks")]
+        public async Task<IActionResult> GetRandomBooksGet([FromQuery] int? number)
+        {
+            List<Book> books = await _service.GetRandomBooks(number);
+            var bookModles = _mapper.Map<List<BookResponseModel>>(books);
+            return Ok(bookModles);
+        }
+
+        [HttpPost("categorybooks")]
+        public async Task<IActionResult> GetBooksByCategoryPost([FromBody] BookRequest model)
+        {
+            List<Book> books = await _service.GetRandomBooksByCategory(model?.Category, model?.Number);
+            var bookModles = _mapper.Map<List<BookResponseModel>>(books);
+            return Ok(bookModles);
+        }
+
+        [HttpGet("categorybooks")]
+        public async Task<IActionResult> GetBooksByCategoryGet([FromQuery] BookRequest model)
+        {
+            List<Book> books = await _service.GetRandomBooksByCategory(model?.Category, model?.Number);
+            var bookModles = _mapper.Map<List<BookResponseModel>>(books);
+            return Ok(bookModles);
+        }
+
+        [HttpPost("reservation")]
+        public async Task<IActionResult> GetBooksByCategoryPost([FromBody] ReservationRequest model)
+        {
+            return BadRequest();
         }
 
         public override string GetControllerName()

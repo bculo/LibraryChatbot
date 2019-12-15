@@ -19,6 +19,7 @@ namespace INTS_API.Configurations
             services.AddScoped<ITokenManager, TokenManager>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(AsyncRepository<>));
         }
     }

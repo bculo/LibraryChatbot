@@ -9,12 +9,14 @@ namespace INTS_API.Services
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookrepo;
-        private readonly IRepository<Category> _categoryrepo;
+        private readonly ICategoryRepository _categoryrepo;
+        private readonly IUserRepository _userepo;
 
-        public BookService(IBookRepository bookrepo, IRepository<Category> categoryrepo)
+        public BookService(IBookRepository bookrepo, ICategoryRepository categoryrepo, IUserRepository userrepo)
         {
             _bookrepo = bookrepo;
             _categoryrepo = categoryrepo;
+            _userepo = userrepo;
         }
 
         /// <summary>
@@ -35,9 +37,63 @@ namespace INTS_API.Services
             return false;
         }
 
-        public async Task<List<Book>> GetRandomBooks()
+        public async Task CreateBookReservation(string username, string bookName)
         {
-            return await _bookrepo.GetRandomBooksAsync(5);
+            var bookResult = _bookrepo.GetBookByName(bookName);
+            var userResult = _userepo.GetUserByNameAsync(username);
+
+            await Task.WhenAll(bookResult, userResult);
+
+            if(userResult == null)
+            {
+                var userFromDatabase = new User
+                {
+                    UserName = username
+                };
+
+                userFromDatabase = await _userepo.AddAsync(userFromDatabase);
+
+                if(userFromDatabase != null)
+                {
+
+                }
+            }
+        }
+
+        public async Task<List<Book>> GetUserReservations(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Book>> GetRandomBooks(int? number)
+        {
+            if(number.HasValue)
+                return await _bookrepo.GetRandomBooksAsync(number.Value);
+            else
+                return await _bookrepo.GetRandomBooksAsync(5);
+        }
+
+        public async Task<List<Book>> GetRandomBooksByCategory(string category, int? bookNumber)
+        {
+            string finalCateogry = string.Empty;
+
+            if (category == null)
+                return null;
+
+            if (category.Length > 1)
+            {
+                string firstLetter = category[0].ToString().ToUpper();
+                string restOfTheString = category.Substring(1);
+                finalCateogry = firstLetter + restOfTheString;
+            }
+            else
+            {
+                finalCateogry = category.ToUpper();
+            }
+
+            int numberOfRecords = (bookNumber.HasValue) ? bookNumber.Value : 5;
+
+            return await _bookrepo.GetRandomBooksByCategoryAsync(finalCateogry, numberOfRecords);
         }
     }
 }
