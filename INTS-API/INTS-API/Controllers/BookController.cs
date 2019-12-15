@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using INTS_API.Contracts.BookAPI;
 using INTS_API.Entities;
 using INTS_API.Filters;
 using INTS_API.Interfaces;
@@ -74,9 +75,38 @@ namespace INTS_API.Controllers
         }
 
         [HttpPost("reservation")]
-        public async Task<IActionResult> GetBooksByCategoryPost([FromBody] ReservationRequest model)
+        public async Task<IActionResult> SetUserReservation([FromBody] ReservationRequest model)
         {
-            return BadRequest();
+            var result = await _service.CreateBookReservation(model?.Username, model?.Book);
+
+            if (result.Success)
+            {
+                return Ok();
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        [HttpPost("userreservations")]
+        public async Task<IActionResult> GetUserReservations([FromBody] ReservationRequest model)
+        {
+            var result = await _service.GetUserReservations(model?.Username);
+            List<BookModel> models = _mapper.Map<List<BookModel>>(result);
+            return Ok(models);
+        }
+
+        [HttpPost("bookrating")]
+        [ValidateModel]
+        public async Task<IActionResult> SetBookRating([FromBody] ReservationRequest model)
+        {
+            var result = await _service.SetBookReservation(model?.Username, model?.Book, model?.Rating);
+
+            BookRatingResponse rating = new BookRatingResponse()
+            {
+                Result = result
+            };
+
+            return Ok(rating);
         }
 
         public override string GetControllerName()

@@ -1,5 +1,6 @@
 ﻿using INTS_API.Entities;
 using INTS_API.Interfaces;
+using INTS_API.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,13 +13,22 @@ namespace INTS_API.Services
         private readonly ICategoryRepository _categoryrepo;
         private readonly IUserRepository _userepo;
         private readonly IRepository<BookCopy> _copyrepo;
+        private readonly IRepository<BorrowedBook> _borrowrepo;
+        private readonly IRepository<UserRating> _rating;
 
-        public BookService(IBookRepository bookrepo, ICategoryRepository categoryrepo, IUserRepository userrepo, IRepository<BookCopy> copyrepo)
+        public BookService(IBookRepository bookrepo,
+            ICategoryRepository categoryrepo,
+            IUserRepository userrepo,
+            IRepository<BookCopy> copyrepo,
+            IRepository<BorrowedBook> borrowrepo,
+            IRepository<UserRating> rating)
         {
             _bookrepo = bookrepo;
             _categoryrepo = categoryrepo;
             _userepo = userrepo;
             _copyrepo = copyrepo;
+            _borrowrepo = borrowrepo;
+            _rating = rating;
         }
 
         /// <summary>
@@ -49,32 +59,87 @@ namespace INTS_API.Services
             return false;
         }
 
-        public async Task CreateBookReservation(string username, string bookName)
+        public async Task<ServiceResult> CreateBookReservation(string username, string bookName)
         {
-            var bookResult = _bookrepo.GetBookByName(bookName);
-            var userResult = _userepo.GetUserByNameAsync(username);
+            //dovati knjigu
+            var bookResult = await _bookrepo.GetBookByName(bookName);
 
-            await Task.WhenAll(bookResult, userResult);
+            //dohvati korisnika
+            var userResult = await _userepo.GetUserByNameAsync(username);
 
-            if(userResult == null)
+            ServiceResult result = new ServiceResult();
+            User userFromDatabase = new User();
+
+            if (userResult == null) //ako korisnik ne postoji u bazi
             {
-                var userFromDatabase = new User
-                {
-                    UserName = username
-                };
+                userFromDatabase.UserName = username;
+                userFromDatabase.HashedPassword = "NESTONECE";
 
+                //dodaj korisnika u bazu
                 userFromDatabase = await _userepo.AddAsync(userFromDatabase);
 
-                if(userFromDatabase != null)
+                if(userFromDatabase == null) //pogreška
                 {
-
+                    result.SetErrorMessage("Uff, something went wrong :(");
+                    return result;
                 }
             }
+
+            //knjiga nije pronadena u bazi
+            if(bookResult == null)
+            {
+                result.SetErrorMessage("Uff, something went wrong :(");
+                return result;
+            }
+
+            //korisnik je vec posudio ovu knjigu
+            if (!await _bookrepo.CanUserMakeAReservation(bookName, userResult.Id))
+            {
+                result.SetErrorMessage("You already borrowed this book :;");
+                return result;
+            }
+
+            //sve kopije knjige su posudene
+            var bookForReservation = await _bookrepo.GetAvailableBookCopy(bookName);
+            if (bookForReservation == null)
+            {
+                result.SetErrorMessage("This book isnt available :(");
+                return result;
+            }
+
+            BorrowedBook borrowedBook = new BorrowedBook()
+            {
+                BookCopyId = bookForReservation.Id,
+                EndDateTime = DateTime.Now.AddDays(30),
+                StartDateTime = DateTime.Now,
+                UserId = userResult.Id,
+            };
+
+            bookForReservation.Borrowed = true;
+
+            //dodaj rezervaciju
+            borrowedBook = await _borrowrepo.AddAsync(borrowedBook);
+            if(borrowedBook != null && (await _copyrepo.UpdateAsync(bookForReservation) != null))
+            { 
+                return result;
+            }
+
+            result.SetErrorMessage("Uff, something went wrong :(");
+            return result;
         }
 
         public async Task<List<Book>> GetUserReservations(string username)
         {
-            throw new NotImplementedException();
+            //dohvati korisnika
+            var userResult = await _userepo.GetUserByNameAsync(username);
+
+            //ako korisnik ne postoji u bazi onda nema rezervacija
+            if(userResult == null)
+            {
+                return new List<Book>();
+            }
+
+            return await _bookrepo.GetUserReservations(userResult.Id);
         }
 
         public async Task<List<Book>> GetRandomBooks(int? number)
@@ -106,6 +171,42 @@ namespace INTS_API.Services
             int numberOfRecords = (bookNumber.HasValue) ? bookNumber.Value : 5;
 
             return await _bookrepo.GetRandomBooksByCategoryAsync(finalCateogry, numberOfRecords);
+        }
+
+        public async Task<string> SetBookReservation(string username, string book, string rating)
+        {
+            int ratingINT = 5;
+            int.TryParse(rating, out ratingINT);
+
+            //dohvati korisnika
+            var userResult = await _userepo.GetUserByNameAsync(username);
+
+            //ako korisnik ne postoji u bazi onda nema rezervacija
+            if (userResult == null)
+            {
+                return "Somethin went wrong :(";
+            }
+
+            //dovati knjigu
+            var bookResult = await _bookrepo.GetBookByName(book);
+
+            //ako korisnik ne postoji u bazi onda nema rezervacija
+            if (bookResult == null)
+            {
+                return "Somethin went wrong :(";
+            }
+
+            UserRating ratingObject = new UserRating()
+            {
+                BookId = bookResult.Id,
+                UserId = userResult.Id,
+                Rate = ratingINT
+            };
+
+            userResult.UserRatings.Add(ratingObject);
+            await _userepo.UpdateAsync(userResult);
+
+            return "Book succesfully rated";
         }
     }
 }

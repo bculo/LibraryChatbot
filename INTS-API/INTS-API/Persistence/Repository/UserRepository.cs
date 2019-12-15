@@ -11,7 +11,10 @@ namespace INTS_API.Persistence.Repository
 
         public async Task<User> GetUserByNameAsync(string username)
         {
-            return await _context.Users.FirstOrDefaultAsync(i => i.UserName == username.Trim());
+            return await _context.Users
+                .Include(i => i.UserRatings)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.UserName.ToLower() == username.ToLower().Trim());
         }
     }
 }

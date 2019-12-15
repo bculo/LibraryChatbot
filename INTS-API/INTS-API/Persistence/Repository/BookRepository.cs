@@ -17,6 +17,7 @@ namespace INTS_API.Persistence.Repository
             return await _context.Books
                 .OrderBy(i => Guid.NewGuid())
                 .Take(number)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -27,22 +28,61 @@ namespace INTS_API.Persistence.Repository
                 .Where(i => i.Category.Name == category)
                 .OrderBy(i => Guid.NewGuid())
                 .Take(number)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task CreateBookReservation(string username, string bookName)
+        public async Task<List<Book>> GetUserReservations(Guid id)
         {
-            
-        }
+            //dohvati posudene knjige od korisnika
+            var result = await _context.BorrowedBooks
+                .Include(i => i.BookCopy)
+                .ThenInclude(i => i.Book)
+                .Where(i => i.UserId == id && i.ReturnDateTime == null)
+                .Select(i => new Book
+                {
+                    Title = i.BookCopy.Book.Title
+                })
+                .AsNoTracking()
+                .ToListAsync();
 
-        public Task<List<Book>> GetUserReservations(string username)
-        {
-            throw new NotImplementedException();
+            return result;
         }
 
         public async Task<Book> GetBookByName(string name)
         {
-            return await _context.Books.FirstOrDefaultAsync(i => i.Title.ToLower() == name.ToLower());
+            return await _context.Books.AsNoTracking().FirstOrDefaultAsync(i => i.Title.ToLower() == name.ToLower());
+        }
+
+        public async Task<BookCopy> GetAvailableBookCopy(string bookName)
+        {
+            //dohvati kopije knjige
+            var result = await _context.Books
+                .Include(i => i.BookCopies)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Title.ToLower() == bookName.ToLower());
+
+            //vrati prvu slobodnu kopiju
+            return result.BookCopies.FirstOrDefault(i => !i.Borrowed);
+        }
+
+        public async Task<bool> CanUserMakeAReservation(string bookName, Guid id)
+        {
+            var result = await _context.BorrowedBooks
+                .Include(i => i.BookCopy)
+                .ThenInclude(i => i.Book)
+                .Where(i => i.UserId == id && i.ReturnDateTime == null)
+                .Select(i => new Book
+                {
+                    Title = i.BookCopy.Book.Title
+                })
+                .Where(i => i.Title.ToLower() == bookName.ToLower())
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (result.Count > 0)
+                return false;
+            return true;
         }
     }
 }

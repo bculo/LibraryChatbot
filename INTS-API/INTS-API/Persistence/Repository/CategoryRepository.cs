@@ -12,7 +12,7 @@ namespace INTS_API.Persistence.Repository
 
         public async Task<Category> GetCategoryByName(string name)
         {
-            return await _context.Categories.FirstOrDefaultAsync(i => i.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            return await _context.Categories.AsNoTracking().FirstOrDefaultAsync(i => i.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

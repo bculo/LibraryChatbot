@@ -28,15 +28,6 @@ namespace INTS_API.Persistence.Repository
             }
             catch (DbUpdateException e)
             {
-                if(instance is Book)
-                {
-                    string projectPath = PathUtils.GetProjectDirectoryPath();
-                    string txtPath = Path.Combine(projectPath, "Datasets", "error.txt");
-
-                    Book temp = instance as Book;
-                    File.AppendAllText(txtPath, temp.Title + Environment.NewLine);
-                }
-
                 return null;
             }
         }
@@ -57,7 +48,7 @@ namespace INTS_API.Persistence.Repository
 
         public virtual async Task<int> CountAsync()
         {
-            return await _context.Set<T>().CountAsync();
+            return await _context.Set<T>().AsNoTracking().CountAsync();
         }
 
         public virtual async Task<bool> DeleteAsync(T instance)
