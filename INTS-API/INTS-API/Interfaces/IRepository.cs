@@ -8,6 +8,7 @@ namespace INTS_API.Interfaces
         Task<List<T>> GetAllAsync();
         Task<T> GetByIdAsync(object instanceId);
         Task<T> AddAsync(T instance);
+        Task<bool> AddRangeAsync(List<T> instances);
         Task<T> UpdateAsync(T instance);
         Task<bool> DeleteAsync(T instance);
         Task<int> CountAsync();

@@ -13,7 +13,6 @@ bookID,title,authors,average_rating,isbn,isbn13,language_code,# num_pages,rating
 16,The Hitchhiker's Guide to the Galaxy (Hitchhiker's Guide to the Galaxy  #1),Douglas Adams-Stephen Fry,4.22,0739322206,9780739322208,eng,6,1222,253
 18,The Ultimate Hitchhiker's Guide (Hitchhiker's Guide to the Galaxy #1-5),Douglas Adams,4.38,0517149257,9780517149256,en-US,815,2801,192
 21,A Short History of Nearly Everything,Bill Bryson-William Roberts,4.20,076790818X,9780767908184,eng,544,228522,8840
-31352,Songmaster,Orson Scott Card,3.73,0312876629,9780312876623,en-US,352,6307,283
 22,Bill Bryson's African Diary,Bill Bryson,3.43,0767915062,9780767915069,eng,55,6993,470
 23,Bryson's Dictionary of Troublesome Words: A Writer's Guide to Getting It Right,Bill Bryson,3.88,0767910435,9780767910439,eng,256,2020,124
 24,In a Sunburned Country,Bill Bryson,4.07,0767903862,9780767903868,eng,335,68213,4077
@@ -9742,6 +9741,7 @@ bookID,title,authors,average_rating,isbn,isbn13,language_code,# num_pages,rating
 31349,Starship Troopers RPG: The Arachnid Empire,Matthew Sprange,4.08,1905176260,9781905176267,eng,160,13,0
 31350,Lovelock (Mayflower Trilogy  #1),Orson Scott Card-Kathryn H. Kidd,3.46,031287751X,9780312877514,en-US,288,2115,85
 31351,Treasure Box,Orson Scott Card,3.32,006109398X,9780061093982,eng,384,3603,190
+31352,Songmaster,Orson Scott Card,3.73,0312876629,9780312876623,en-US,352,6307,283
 31353,Stone Tables,Orson Scott Card,3.87,1573456632,9781573456630,eng,448,1705,132
 31354,Earthfall (Homecoming  #4),Orson Scott Card,3.50,0812532961,9780812532968,en-US,370,8356,120
 31356,William Faulkner: The Sound and the Fury and as I Lay Dying: Essays  Articles  Reviews,Nicolas Tredell,3.96,023112189X,9780231121897,en-US,192,4,0

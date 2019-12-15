@@ -34,8 +34,8 @@ namespace INTS_DATASET.Readers
             int count = result.Count();
 
             //uzmi samo 9000 zapisa
-            if (count > 9000)
-                result = result.Take(9000);
+            if (count > 535)
+                result = result.Take(535);
 
             //pretvori u listu
             var resultList = result.ToList();

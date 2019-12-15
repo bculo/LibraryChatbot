@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace INTS_API.Models.ServiceResponse
+namespace INTS_API.Services.Models
 {
     public class ServiceResult
     {

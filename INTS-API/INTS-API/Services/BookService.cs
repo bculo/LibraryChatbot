@@ -11,12 +11,14 @@ namespace INTS_API.Services
         private readonly IBookRepository _bookrepo;
         private readonly ICategoryRepository _categoryrepo;
         private readonly IUserRepository _userepo;
+        private readonly IRepository<BookCopy> _copyrepo;
 
-        public BookService(IBookRepository bookrepo, ICategoryRepository categoryrepo, IUserRepository userrepo)
+        public BookService(IBookRepository bookrepo, ICategoryRepository categoryrepo, IUserRepository userrepo, IRepository<BookCopy> copyrepo)
         {
             _bookrepo = bookrepo;
             _categoryrepo = categoryrepo;
             _userepo = userrepo;
+            _copyrepo = copyrepo;
         }
 
         /// <summary>
@@ -32,7 +34,17 @@ namespace INTS_API.Services
             Book result = await _bookrepo.AddAsync(book);
 
             if (result != null)
-                return true;
+            {
+                List<BookCopy> copies = new List<BookCopy>();
+
+                for (int i = 0; i < 20; i++)
+                {
+                    BookCopy copy = new BookCopy() { Borrowed = false, BookId = result.Id };
+                    copies.Add(copy);
+                }
+
+                return  await _copyrepo.AddRangeAsync(copies);
+            }
 
             return false;
         }

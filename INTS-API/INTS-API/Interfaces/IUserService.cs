@@ -1,4 +1,4 @@
-﻿using INTS_API.Models.ServiceResponse;
+﻿using INTS_API.Services.Models;
 using System.Threading.Tasks;
 
 namespace INTS_API.Interfaces

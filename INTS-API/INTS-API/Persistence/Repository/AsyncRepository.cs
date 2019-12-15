@@ -1,6 +1,10 @@
-﻿using INTS_API.Interfaces;
+﻿using INTS_API.Entities;
+using INTS_API.Interfaces;
+using INTS_DATASET.Utils;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace INTS_API.Persistence.Repository
@@ -24,7 +28,30 @@ namespace INTS_API.Persistence.Repository
             }
             catch (DbUpdateException e)
             {
+                if(instance is Book)
+                {
+                    string projectPath = PathUtils.GetProjectDirectoryPath();
+                    string txtPath = Path.Combine(projectPath, "Datasets", "error.txt");
+
+                    Book temp = instance as Book;
+                    File.AppendAllText(txtPath, temp.Title + Environment.NewLine);
+                }
+
                 return null;
+            }
+        }
+
+        public async Task<bool> AddRangeAsync(List<T> instances)
+        {
+            try
+            {
+                _context.Set<T>().AddRange(instances);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException e)
+            {
+                return false;
             }
         }
 
