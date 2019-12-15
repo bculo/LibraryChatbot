@@ -6,13 +6,14 @@ import json
 from SearchLibraryRequest import SearchLibraryRequest
 from BookActionsRequest import BookActionsRequest
 
-API_URL = "https://c989350e.ngrok.io/api"
+API_URL = "https://600af0e5.ngrok.io/api"
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 
 def get_n_random_books_post(books_number):
     request = SearchLibraryRequest(books_number, "")
     JSON_Request = json.dumps(request.__dict__)
+    print(JSON_Request)
     r = requests.post(API_URL + "/book/randombooks", data=JSON_Request, headers=headers)
     if r.status_code == 200:
         return r.json()
@@ -51,7 +52,7 @@ def get_user_book_reservations(user_name):
     request = BookActionsRequest(user_name, "", "")
     JSON_Request = json.dumps(request.__dict__)
     print(JSON_Request)
-    r = requests.post(API_URL + "/book/reservation", data=JSON_Request, headers=headers)
+    r = requests.post(API_URL + "/book/userreservations", data=JSON_Request, headers=headers)
     if r.status_code == 200:
         return r.json()
     else:
@@ -62,7 +63,7 @@ def send_user_rating(user_name, book, rating):
     request = BookActionsRequest(user_name, book, rating)
     JSON_Request = json.dumps(request.__dict__)
     print(JSON_Request)
-    r = requests.post(API_URL + "/book/reservation", data=JSON_Request, headers=headers)
+    r = requests.post(API_URL + "/book/bookrating", data=JSON_Request, headers=headers)
     if r.status_code == 200:
         return "Success"
     else:
