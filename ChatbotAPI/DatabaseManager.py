@@ -27,18 +27,35 @@ def get_n_categorized_books(books_number, category):
     return r.json()
 
 
-def get_personalized_books():
-    r = requests.get(API_URL + "/recommend")
-    return r.json()
-
-
-def update_user_book_reservation(username, book):
-    request = ReservationRequest(username, book)
+def update_user_book_reservation(user_name, book):
+    request = ReservationRequest(user_name, book)
     JSON_Request = json.dumps(request.__dict__)
     print(JSON_Request)
     r = requests.post(API_URL + "/book/reservation", data=JSON_Request, headers=headers)
     if r.status_code == 200:
-        print("Yes")
+        return "Success"
     else:
-        print("No")
-    return r.json()
+        return "Fail"
+
+
+def get_user_book_reservations(user_name):
+    request = ReservationRequest(user_name, "")
+    JSON_Request = json.dumps(request.__dict__)
+    print(JSON_Request)
+    r = requests.post(API_URL + "/book/reservation", data=JSON_Request, headers=headers)
+    if r.status_code == 200:
+        return "Success"
+    else:
+        return "Fail"
+
+
+def send_user_rating(user_name, book, rating):
+    request = ReservationRequest(user_name, book, rating)
+    JSON_Request = json.dumps(request.__dict__)
+    print(JSON_Request)
+    r = requests.post(API_URL + "/book/reservation", data=JSON_Request, headers=headers)
+    if r.status_code == 200:
+        return "Success"
+    else:
+        return "Fail"
+

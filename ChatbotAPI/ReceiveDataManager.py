@@ -45,7 +45,7 @@ def fetch_user_token(data):
         return data['conversation']['memory']['token']
 
 
-def fetch_books_number(data):
+def fetch_number(data):
     if 'numbers' not in data['nlp']['entities']:
         return None
     else:
