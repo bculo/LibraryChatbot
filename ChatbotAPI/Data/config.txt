@@ -1,0 +1,6 @@
+# Configuration file for Chatbot API
+
+[Main_Configuration]
+port=5000
+libraryAPI=https://0da2e49c.ngrok.io/api
+libraryAPIHeaders={"Content-type": "application/json", "Accept": "text/plain"}

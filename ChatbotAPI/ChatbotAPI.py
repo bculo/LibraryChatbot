@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
-from ChatbotData import ChatbotData
-import ReceiveDataManager
-import DatabaseManager
+from Data import ChatbotData
+from Data import ReceiveDataManager
+from Data import DatabaseManager
 import json
 
 app = Flask(__name__)
-chatbot_data = ChatbotData()
+chatbot_data = ChatbotData.Main()
 
 
 @app.route('/random', methods=['POST'])

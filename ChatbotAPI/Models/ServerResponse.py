@@ -6,7 +6,7 @@
 """
 
 
-class ServerResponse(object):
+class Response(object):
 
     def __init__(self, status, text_type, content, language, name):
         self.status = status

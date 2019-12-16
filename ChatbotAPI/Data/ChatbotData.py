@@ -1,8 +1,8 @@
 import json
 import os
 import configparser
-from ServerResponse import ServerResponse
-import ReceiveDataManager
+from Data import ReceiveDataManager
+from Models import ServerResponse
 
 
 def get_config_file_path():
@@ -12,7 +12,7 @@ def get_config_file_path():
     return init_file
 
 
-class ChatbotData:
+class Main:
     # Chatbot data class
     # For future storage of important data
 
@@ -36,7 +36,7 @@ class ChatbotData:
         # received_data -> data received from chatbot (SAP Conversational AI predefined JSON structure)
         self.extract_received_data(received_data)
         self.received_messages.append(received_data)
-        object_response = ServerResponse(200, 'text', response_text, self.current_language, self.current_user_name)
+        object_response = ServerResponse.Response(200, 'text', response_text, self.current_language, self.current_user_name)
         response = json.dumps(object_response.__dict__)
         return response
 

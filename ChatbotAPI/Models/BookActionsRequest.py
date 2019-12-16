@@ -6,7 +6,7 @@
 """
 
 
-class BookActionsRequest(object):
+class Request(object):
 
     def __init__(self, Username, Book, Rating):
         self.Username = Username

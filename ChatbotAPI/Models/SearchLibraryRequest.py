@@ -6,7 +6,7 @@
 """
 
 
-class SearchLibraryRequest(object):
+class Request(object):
 
     def __init__(self, Number, Category):
         self.Number = Number
