@@ -1,0 +1,9 @@
+authtoken: 1UhtX5HUjztgyS2cTVEFl7AunYF_7ryJX3H3VMKmwLergi4FE
+tunnels:
+  ChatbotAPI:
+    addr: 5000
+    proto: http
+  INTSAPI:
+    addr: https://localhost:44368/
+    proto: http
+    host_header: localhost

@@ -1,1 +1,6 @@
-﻿ngrok http -host-header=localhost https://localhost:44368/
+﻿
+If starting only INTS API:
+ngrok http -host-header=localhost https://localhost:44368/
+
+If starting both APIs from config file:
+ngrok start -config {PathToProject}\ngrok.yml ChatbotAPI INTSAPI

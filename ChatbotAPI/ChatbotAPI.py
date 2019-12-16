@@ -60,7 +60,7 @@ def user_feedback():
     response_text = 'User user_name successfully or unsuccessfully delivered feedback'
     # Handle user feedback with rating and comment
     full_response = chatbot_data.generate_response(response_text, received_data)
-    return full_response
+    # return full_response
 
 
 @app.route('/bookRating', methods=['POST'])
@@ -112,9 +112,9 @@ def get_user_book_reservation_response(received_data):
     book = ReceiveDataManager.fetch_book(received_data)
     server_response = DatabaseManager.update_user_book_reservation(user_name, book)
     if server_response == "Fail":
-        response_text = "Book already reserved! Try another one."
+        response_text = "You already reserved this book! Try another one."
     else:
-        response_text = 'User %s attempt to reserve a book %s: %s' % (user_name, book, server_response)
+        response_text = 'Book successfully reserved!'
     return response_text
 
 
@@ -123,8 +123,12 @@ def get_list_of_book_reservations_by_user_response(received_data):
     user_name = ReceiveDataManager.fetch_user_name(received_data)
     user_books = DatabaseManager.get_user_book_reservations(user_name)
     response_text = 'List of reserved books by user %s:\n' % user_name
+
     if user_books == "Fail":
         return "Error has occurred! Library API not working!"
+    elif len(user_books) is 0:
+        return "Hmm.. It seems like you do not have reserved books. Make a reservation and try again. :)"
+
     book_number = 1
     for book in user_books:
         response_text += str(book_number) + '. ' + book['title'] + '\n'
