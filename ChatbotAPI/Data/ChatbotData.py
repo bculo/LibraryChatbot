@@ -8,7 +8,7 @@ from Models import ServerResponse
 def get_config_file_path():
     # Config file in API or Data?
     current_older = os.path.dirname(os.path.abspath(__file__))
-    init_file = os.path.join(current_older, 'config.txt')
+    init_file = os.path.join(current_older, 'config.properties')
     return init_file
 
 
@@ -22,8 +22,10 @@ class Main:
         self.config.read(get_config_file_path())
 
         # Set main attributes
-        self.main_data = dict(self.config.items('Main_Configuration'))
-        self.port = self.main_data['port']
+        sections = self.config.sections()
+        if 'Main_Configuration' in sections:
+            self.main_data = dict(self.config.items('Main_Configuration'))
+            self.port = self.main_data['port']
 
         # Set Chatbot data
         self.current_user_name = 'Default username'

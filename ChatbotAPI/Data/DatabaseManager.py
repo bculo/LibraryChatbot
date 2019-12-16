@@ -16,13 +16,16 @@ def read_config_file():
     global API_URL
     global headers
     current_older = os.path.dirname(os.path.abspath(__file__))
-    init_file = os.path.join(current_older, 'config.txt')
+    init_file = os.path.join(current_older, 'config.properties')
     config = configparser.RawConfigParser()
     config.read(init_file)
     main_data = dict(config.items('Main_Configuration'))
-    API_URL = main_data['libraryapi']
-    headers = main_data['libraryapiheaders']
-    headers = json.loads(headers)
+    sections = config.sections()
+    if 'Main_Configuration' in sections:
+        main_data = dict(config.items('Main_Configuration'))
+        API_URL = main_data['libraryapi']
+        headers = main_data['libraryapiheaders']
+        headers = json.loads(headers)
 
 
 read_config_file()
